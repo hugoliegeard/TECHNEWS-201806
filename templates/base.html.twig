@@ -1,0 +1,29 @@
+<!doctype html>
+<!--
+ _____         _     _   _                     _
+|_   _|       | |   | \ | |                   | |
+  | | ___  ___| |__ |  \| | _____      _____  | |
+  | |/ _ \/ __| '_ \| . ` |/ _ \ \ /\ / / __| | |
+  | |  __/ (__| | | | |\  |  __/\ V  V /\__ \ |_|
+  \_/\___|\___|_| |_\_| \_/\___| \_/\_/ |___/ (_)
+-->
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        {% block title %}
+            {% block page_title '' %} |
+            {% block site_title 'TechNews' %}
+        {% endblock %}
+    </title>
+    {% block stylesheets '' %}
+</head>
+<body>
+    {% block body '' %}
+    {% block javascripts '' %}
+    {% block final_javascripts '' %}
+</body>
+</html>
