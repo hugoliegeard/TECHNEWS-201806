@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+    {{ dump(article) }}
+    {{ dump(article.category.name) }}
+    {{ dump(article.user.firstname) }}
     <div class="row">
         <!--colleft-->
         <div class="col-md-8 col-sm-12">
