@@ -1,43 +1,66 @@
 {% extends "layout.html.twig" %}
 
 {% block page_title %}
-    Catégorie...
+    {{ category.name | title }}
 {% endblock %}
 
+{% set active = category.slug %}
+
 {% block content %}
+    {#{{ dump(app.request) }}#}
     <div class="row">
         <!--colleft-->
         <div class="col-md-8 col-sm-12">
-            <div class="box-caption">
-                <span>Computing</span>
-            </div>
-            <!--list-news-cate-->
-            <div class="list-news-cate">
-                <article class="news-cate-item">
-                    <div class="row">
-                        <div class="col-md-5 col-sm-5 col-xs-12">
-                            <a href="#">
-                                <img alt="" src="{{ asset('images/product/2.jpg') }}">
-                            </a>
-                        </div>
-                        <div class="col-md-7 col-sm-7 col-xs-12">
-                            <h3><a href="#">Tip Aligning Digital Marketing with Business Goals and Objectives</a></h3>
-                            <div class="meta-post">
-                                <a href="#">
-                                    Hugo LIEGEARD
-                                </a>
-                                <em></em>
-                                <span>
-                                        2017-02-26 09:37:18
-                                    </span>
+            {% if articles is not empty %}
+                <div class="box-caption">
+                    <span>{{ category.name }}</span>
+                    {#<span>{{ articles[0].category.name }}</span>#}
+                    {#<span>{{ app.request.get('category') }}</span>#}
+                </div>
+                <!--list-news-cate-->
+                <div class="list-news-cate">
+                    {% for article in articles %}
+                        <article class="news-cate-item">
+                            <div class="row">
+                                <div class="col-md-5 col-sm-5 col-xs-12">
+                                    <a href="{{ path('index_article', {
+                                        'category'  : article.category.slug,
+                                        'slug'      : article.slug,
+                                        'id'        : article.id
+                                    }) }}">
+                                        <img alt="{{ article.title }}" src="{{ asset('images/product/'~article.featuredImage) }}">
+                                    </a>
+                                </div>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                    <h3><a href="{{ path('index_article', {
+                                            'category'  : article.category.slug,
+                                            'slug'      : article.slug,
+                                            'id'        : article.id
+                                        }) }}">{{ article.title }}</a></h3>
+                                    <div class="meta-post">
+                                        <a href="#">
+                                            {{ article.user.firstname ~ ' ' ~ article.user.lastname }}
+                                        </a>
+                                        <em></em>
+                                        <span>
+                                           {{ article.createdDate | date('d/m/Y') }}
+                                        </span>
+                                    </div>
+                                    {{ article.content | summary }}
+                                </div>
                             </div>
-                            Nulla quis lorem ut libero malesuada feugiat. Cras ultricies ligula sed magna dictum porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere...
-                        </div>
-                    </div>
-                </article>
-            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
 
-            <div class="paging">
+                <div class="alert alert-danger">
+                    <strong>Aucune publication pour le moment</strong>
+                </div>
+
+            {% endif %}
+
+            {#<div class="paging">
                 <a href="#">Prev</a>
                 <a href="#" class="current">1</a>
                 <a href="#">2</a>
@@ -45,9 +68,11 @@
                 <a href="#">4</a>
                 <a href="#">5</a>
                 <a href="#">Next</a>
-            </div>
+            </div>#}
 
         </div>
+
+        {{ render(controller('App\\Controller\\TechNews\\IndexController::sidebar')) }}
 
     </div>
 {% endblock %}

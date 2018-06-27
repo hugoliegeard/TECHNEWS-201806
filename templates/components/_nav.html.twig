@@ -2,10 +2,16 @@
 <nav class="menu-res hidden-lg hidden-md ">
     <div class="menu-res-inner">
         <ul>
-            <li><a href="index.html">HOME</a></li>
-            <li><a href="business.html">BUSINESS</a></li>
-            <li><a href="computing.html"> COMPUTING</a></li>
-            <li><a href="tech.html">TECH</a></li>
+            <li>
+                <a href="{{ path('index') }}">Accueil </a>
+            </li>
+            {% for category in categories %}
+                <li>
+                    <a href="{{ path('index_category', {
+                        category: category.slug
+                    }) }}">{{ category.name }}</a>
+                </li>
+            {% endfor %}
         </ul>
     </div>
 </nav>
@@ -28,24 +34,16 @@
                 <span>MENU</span>
             </div>
             <ul class="hidden-sm hidden-xs">
-                <li>
+                <li {% if active == 'home' %}class="current"{% endif %}>
                     <a href="{{ path('index') }}">Accueil </a>
                 </li>
-                <li>
-                    <a href="{{ path('index_category', {
-                        category: 'business'
-                    }) }}">Business</a>
-                </li>
-                <li>
-                    <a href="{{ path('index_category', {
-                        category: 'computing'
-                    }) }}">Computing</a>
-                </li>
-                <li>
-                    <a href="{{ path('index_category', {
-                        category: 'tech'
-                    }) }}">Tech </a>
-                </li>
+                {% for category in categories %}
+                    <li {{ active == category.slug ? 'class="current"' }}>
+                        <a href="{{ path('index_category', {
+                            category: category.slug
+                        }) }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
             </ul>
             <div class="search-icon">
                 <div class="search-icon-inner">

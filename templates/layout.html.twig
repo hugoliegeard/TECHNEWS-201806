@@ -1,5 +1,8 @@
 {% extends "base.html.twig" %}
 
+{#{% set categories = category_service.findAll() %}#}
+{% set categories = getCategories() %}
+
 {% block stylesheets %}
     <!-- Favicons -->
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
@@ -29,6 +32,8 @@
 {% endblock %}
 
 {% block body %}
+
+    {#{{ dump(categories) }}#}
 
     <!--preload-->
     <div class="loader" id="page-loader">

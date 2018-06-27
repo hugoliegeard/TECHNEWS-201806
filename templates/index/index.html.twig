@@ -1,5 +1,7 @@
 {% extends "layout.html.twig" %}
 
+{% set active = 'home' %}
+
 {% block page_title %}
     Accueil
 {% endblock %}
@@ -20,38 +22,41 @@
         <!--spotlight-->
         <section class="owl-carousel owl-spotlight">
 
-            {% for article in articles %}
-                {% if article.spotlight %}
+            {% for article in spotlight %}
                     <div>
                         <article class="spotlight-item">
                             <div class="spotlight-img">
-                                <img alt="{{ article.titre }}"
-                                     src="{{ asset('images/product/'~article.featuredimage) }}"
+                                <img alt="{{ article.title }}"
+                                     src="{{ asset('images/product/'~article.featuredImage) }}"
                                      class="img-responsive"/>
-                                <a href="javascript:void(0)" class="cate-tag">
-                                    {{ article.categorie.libelle }}
+                                <a href="{{ path('index_category', {
+                                    'category' : article.category.slug }) }}" class="cate-tag">
+                                    {{ article.category.name }}
                                 </a>
                             </div>
                             <div class="spotlight-item-caption">
                                 <h2 class="font-heading">
-                                    <a href="javascript:void(0)">
-                                        {{ article.titre }}
+                                    <a href="{{ path('index_article', {
+                                        'category'  : article.category.slug,
+                                        'slug'      : article.slug,
+                                        'id'        : article.id
+                                    }) }}">
+                                        {{ article.title }}
                                     </a>
                                 </h2>
                                 <div class="meta-post">
                                     <a href="#">
-                                        {{ article.auteur.prenom ~ ' ' ~ article.auteur.nom }}
+                                        {{ article.user.firstname ~ ' ' ~ article.user.lastname }}
                                     </a>
                                     <em></em>
                                     <span>
-                                        {{ article.datecreation | date('d/m/Y') }}
+                                        {{ article.createdDate | date('d/m/Y') }}
                                     </span>
                                 </div>
-                                {# Accroche Ici #}
+                                {{ article.content | summary }}
                             </div>
                         </article>
                     </div>
-                {% endif %}
             {% endfor %}
 
         </section>
@@ -63,19 +68,28 @@
                     <div class="col-md-4 col-sm-4 col-xs-12">
                         <div class="spotlight-item-thumb">
                             <div class="spotlight-item-thumb-img">
-                                <a href="#">
-                                    <img alt="{{ article.titre }}" src="{{ asset('images/product/'~article.featuredimage) }}"/>
+                                <a href="{{ path('index_article', {
+                                    'category'  : article.category.slug,
+                                    'slug'      : article.slug,
+                                    'id'        : article.id
+                                }) }}">
+                                    <img alt="{{ article.title }}" src="{{ asset('images/product/'~article.featuredImage) }}"/>
                                 </a>
-                                <a href="javascript:void(0)" class="cate-tag">{{ article.categorie.libelle }}</a>
+                                <a href="{{ path('index_category', {
+                                    'category' : article.category.slug }) }}" class="cate-tag">{{ article.category.name }}</a>
                             </div>
-                            <h3><a href="javascript:void(0)">{{ article.titre | title }}</a></h3>
+                            <h3><a href="{{ path('index_article', {
+                                    'category'  : article.category.slug,
+                                    'slug'      : article.slug,
+                                    'id'        : article.id
+                                }) }}">{{ article.title | title }}</a></h3>
                             <div class="meta-post">
                                 <a href="javascript:void(0)">
-                                    {{ article.auteur.prenom ~ ' ' ~ article.auteur.nom }}
+                                    {{ article.user.firstname ~ ' ' ~ article.user.lastname }}
                                 </a>
                                 <em></em>
                                 <span>
-                                    {{ article.datecreation | date('d/m/Y') }}
+                                    {{ article.createdDate | date('d/m/Y') }}
                                 </span>
                             </div>
                         </div>
@@ -85,4 +99,9 @@
             </div>
         </section>
     </div>
+
+    {# Sidebar #}
+    {#{% include 'components/_sidebar.html.twig' %}#}
+    {{ render(controller('App\\Controller\\TechNews\\IndexController::sidebar')) }}
+
 {% endblock %}
