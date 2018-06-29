@@ -41,11 +41,10 @@ class IndexController extends Controller
 
     /**
      * Afficher les Articles d'une Catégorie
-     * @Route("/categorie/{category}",
+     * @Route("/categorie/{category<\w+>}",
      *  name="index_category",
      *     methods={"GET"},
-     *     defaults={"category":"tout"},
-     *     requirements={"category":"\w+"})
+     *     defaults={"category":"tout"})
      * @param $category
      * @return Response
      */
@@ -73,9 +72,8 @@ class IndexController extends Controller
 
     /**
      * Affiche un Article
-     * @Route("/{category}/{slug}_{id}.html",
-     *     name="index_article",
-     *     requirements={"id":"\d+"})
+     * @Route("/{category}/{slug}_{id<\d+>}.html",
+     *     name="index_article")
      * @param Article $article
      * @param $id
      * @return Response

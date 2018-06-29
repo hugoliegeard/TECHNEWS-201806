@@ -17,6 +17,7 @@ class AppExtension extends AbstractExtension
 {
 
     private $em;
+    public const NB_SUMMARY_CHAR = 170;
 
     /**
      * AppExtension constructor.
@@ -38,10 +39,10 @@ class AppExtension extends AbstractExtension
 
                 # Si ma chaine est supérieur à 170...
                 # Je poursuis, sinon c'est inutile
-                if (strlen($string) > 170) {
+                if (strlen($string) > self::NB_SUMMARY_CHAR) {
 
                     # Je coupe ma chaine à 170
-                    $stringCut = substr($string, 0, 170);
+                    $stringCut = substr($string, 0, self::NB_SUMMARY_CHAR);
 
                     # Je m'assure de ne pas couper de mot
                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'...';
@@ -51,7 +52,7 @@ class AppExtension extends AbstractExtension
                 # On retourne l'accroche
                 return $string;
 
-            })
+            }, array('is_safe' => array('html')))
         ];
     }
 

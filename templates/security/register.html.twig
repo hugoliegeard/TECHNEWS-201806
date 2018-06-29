@@ -1,0 +1,32 @@
+{% extends "layout.html.twig" %}
+
+{% set active = 'register' %}
+
+{% block page_title %}
+    Inscription
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <h3>Inscrivez-vous</h3>
+            {#{% form_theme form 'bootstrap_3_layout.html.twig' %}#}
+            {{ form(form, {attr: {novalidate: 'novalidate'}}) }}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block final_javascripts %}
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pwstrength-bootstrap/2.2.1/pwstrength-bootstrap.min.js"></script>
+    <script>
+        $('#user_password').pwstrength();
+    </script>
+{% endblock %}

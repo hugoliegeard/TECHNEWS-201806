@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Controller\HelperTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Article
 {
+    use HelperTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -63,9 +66,31 @@ class Article
      */
     private $user;
 
-    public function __construct()
+    /**
+     * Article constructor.
+     * @param $id
+     * @param $title
+     * @param $slug
+     * @param $content
+     * @param $featuredImage
+     * @param $special
+     * @param $spotlight
+     * @param $createdDate
+     * @param $category
+     * @param $user
+     */
+    public function __construct($id = null, $title, $slug, $content, $featuredImage, $special, $spotlight, $createdDate, $category, $user)
     {
-        $this->createdDate = new \DateTime();
+        $this->id = $id;
+        $this->title = $title;
+        $this->slug = $slug;
+        $this->content = $content;
+        $this->featuredImage = $featuredImage;
+        $this->special = $special;
+        $this->spotlight = $spotlight;
+        $this->createdDate = $createdDate;
+        $this->category = $category;
+        $this->user = $user;
     }
 
     public function getId()
@@ -97,12 +122,12 @@ class Article
         return $this;
     }
 
-    public function getFeaturedImage(): ?string
+    public function getFeaturedImage()
     {
         return $this->featuredImage;
     }
 
-    public function setFeaturedImage(string $featuredImage): self
+    public function setFeaturedImage($featuredImage): self
     {
         $this->featuredImage = $featuredImage;
 

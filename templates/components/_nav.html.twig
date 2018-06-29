@@ -44,6 +44,9 @@
                         }) }}">{{ category.name }}</a>
                     </li>
                 {% endfor %}
+                <li {% if active == 'register' %}class="current"{% endif %}>
+                    <a href="{{ path('user_register') }}">Inscription</a>
+                </li>
             </ul>
             <div class="search-icon">
                 <div class="search-icon-inner">
