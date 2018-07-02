@@ -93,6 +93,13 @@ class Article
         $this->user = $user;
     }
 
+    public function update(string $title, string $slug, string $content)
+    {
+        $this->title = $title;
+        $this->slug = $slug;
+        $this->content = $content;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -217,7 +224,6 @@ class Article
     {
         $this->slug = $slug;
     }
-
 
 
 }

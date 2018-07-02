@@ -2,8 +2,6 @@
 
 namespace App\Article;
 
-
-use App\Entity\Article;
 use App\Entity\Category;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,8 +15,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArticleType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        $this->image_url = $options['image_url'];
+        $this->slug      = $options['slug'];
+
         $builder
             # Champ TITLE
             ->add('title', TextType::class, [
@@ -28,6 +31,23 @@ class ArticleType extends AbstractType
                     'placeholder' => "Titre de l'Article"
                 ]
             ])
+        ;
+
+        if ($this->slug) {
+
+            $builder
+                ->add('slug', TextType::class, [
+                    'required' => true,
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => "Slug de l'Article"
+                    ]
+                ])
+            ;
+
+        }
+
+        $builder
             # Champ CATEGORY
             ->add('category', EntityType::class, [
                 'class' => Category::class,
@@ -45,8 +65,10 @@ class ArticleType extends AbstractType
             ->add('featuredImage', FileType::class, [
                 'required' => false,
                 'label' => false,
+                'data_class' => null,
                 'attr' => [
-                    'class' => 'dropify'
+                    'class' => 'dropify',
+                    'data-default-file' => $this->image_url
                 ]
             ])
             # Champs SPECIAL & SPOTLIGHT
@@ -71,13 +93,16 @@ class ArticleType extends AbstractType
                 'label' => 'Publier mon Article'
             ])
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
 //            'data_class' => Article::class
-            'data_class' => ArticleRequest::class
+            'data_class' => ArticleRequest::class,
+            'image_url' => null,
+            'slug' => null
         ]);
     }
 

@@ -4,6 +4,10 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         in_memory: { memory: ~ }
+        user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -16,11 +20,24 @@ security:
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
-            # form_login: true
             # https://symfony.com/doc/current/security/form_login_setup.html
+            form_login:
+                login_path: security_login
+                check_path: security_login
+                username_parameter: app_login[email]
+                password_parameter: app_login[password]
+            provider: user_provider
+            logout:
+                path: /deconnexion
+                target: /
+
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_AUTHOR: ROLE_USER
+        ROLE_ADMIN: [ROLE_AUTHOR, ROLE_ALLOWED_TO_SWITCH]

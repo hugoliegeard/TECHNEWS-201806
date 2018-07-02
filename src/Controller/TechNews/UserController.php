@@ -41,7 +41,7 @@ class UserController extends Controller
             $this->addFlash('notice','Félicitation, vous pouvez vous connecter !');
 
             # Redirection
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('security_login');
 
         }
 

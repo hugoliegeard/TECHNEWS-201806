@@ -12,6 +12,8 @@ namespace App\Article;
 use App\Controller\HelperTrait;
 use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ArticleRequestHandler
@@ -19,22 +21,26 @@ class ArticleRequestHandler
 
     use HelperTrait;
 
-    private $em, $assetsDirectory, $articleFactory;
+    private $em, $assetsDirectory, $articleFactory, $packages;
 
     /**
      * ArticleRequestHandler constructor.
      * @param EntityManagerInterface $entityManager
      * @param ArticleFactory $articleFactory
-     * @param $assetsDirectory
+     * @param string $assetsDirectory
+     * @param Packages $packages
+     * @internal param Package $package
      * @internal param $em
      */
     public function __construct(EntityManagerInterface $entityManager,
-                                ArticleFactory $articleFactory ,
-                                $assetsDirectory)
+                                ArticleFactory $articleFactory,
+                                string $assetsDirectory,
+                                Packages $packages)
     {
         $this->em = $entityManager;
         $this->articleFactory = $articleFactory;
         $this->assetsDirectory = $assetsDirectory;
+        $this->packages = $packages;
     }
 
     public function handle(ArticleRequest $request): Article
@@ -68,4 +74,9 @@ class ArticleRequestHandler
 
         return $article;
     }
+
+//    public function prepareArticleFromRequest(Article $article): ArticleRequest
+//    {
+//        return ArticleRequest::createFromArticle($article, $this->packages, $this->assetsDirectory);
+//    }
 }

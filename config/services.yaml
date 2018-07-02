@@ -33,4 +33,8 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\Article\ArticleRequestHandler:
-        arguments: ['@Doctrine\ORM\EntityManagerInterface','@App\Article\ArticleFactory','%articles_assets_directory%']
+        arguments: ['@Doctrine\ORM\EntityManagerInterface','@App\Article\ArticleFactory','%articles_assets_directory%','@Symfony\Component\Asset\Packages']
+
+    App\Article\ArticleRequest:
+        properties:
+            article: '@Article'

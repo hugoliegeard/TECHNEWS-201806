@@ -3,11 +3,17 @@
 namespace App\Article;
 
 
+use App\Entity\Article;
 use App\Entity\User;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ArticleRequest
 {
+
+    private $id;
+
     /**
      * @Assert\NotBlank(message="N'oubliez pas le titre.")
      * @Assert\Length(
@@ -28,6 +34,7 @@ class ArticleRequest
      *     maxSize="2M", maxSizeMessage="Votre image est trop lourde.")
      */
     private $featuredImage;
+    private $imageUrl;
     private $special;
     private $spotlight;
     private $createdDate;
@@ -192,5 +199,62 @@ class ArticleRequest
         $this->user = $user;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
+    }
 
+    /**
+     * @param mixed $imageUrl
+     */
+    public function setImageUrl($imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Créer un ArticleRequest depuis un Article de Entity
+     * @param Article $article
+     * @param Packages $packages
+     * @param string $assetsDirectory
+     * @return ArticleRequest
+     * @internal param Package|Packages $package
+     * @internal param $assetsDirectory
+     * @internal param Package $package
+     */
+    public static function createFromArticle(Article $article, Packages $packages, string $assetsDirectory): self
+    {
+        $ar = new self($article->getUser());
+        $ar->id = $article->getId();
+        $ar->title = $article->getTitle();
+        $ar->slug = $article->getSlug();
+        $ar->content = $article->getContent();
+        $ar->featuredImage = new File($assetsDirectory . '/' . $article->getFeaturedImage());
+        $ar->imageUrl = $packages->getUrl('images/product/'. $article->getFeaturedImage());
+        $ar->special = $article->getSpecial();
+        $ar->spotlight = $article->getSpotlight();
+        $ar->createdDate = $article->getCreatedDate();
+        $ar->category = $article->getCategory();
+
+        return $ar;
+    }
 }

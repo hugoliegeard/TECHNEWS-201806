@@ -112,8 +112,10 @@ class IndexController extends Controller
 
     /**
      * Génération de la Sidebar
+     * @param Article|null $article
+     * @return Response
      */
-    public function sidebar() {
+    public function sidebar(?Article $article = null) {
 
         # Récupération du Répository
         $repository = $this->getDoctrine()
@@ -128,7 +130,8 @@ class IndexController extends Controller
         # Rendu de la vue
         return $this->render('components/_sidebar.html.twig', [
            'articles' => $articles,
-           'specials' => $specials
+           'specials' => $specials,
+            'article' => $article
         ]);
 
     }

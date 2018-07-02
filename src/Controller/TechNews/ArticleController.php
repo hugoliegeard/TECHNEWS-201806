@@ -4,19 +4,14 @@ namespace App\Controller\TechNews;
 
 use App\Article\ArticleRequest;
 use App\Article\ArticleRequestHandler;
+use App\Article\ArticleRequestUpdateHandler;
 use App\Article\ArticleType;
 use App\Controller\HelperTrait;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\User;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -72,6 +67,7 @@ class ArticleController extends Controller
     /**
      * Formulaire pour créer un Article
      * @Route("/creer-un-article", name="article_add")
+     * @Security("has_role('ROLE_AUTHOR')")
      * @param Request $request
      * @param ArticleRequestHandler $articleRequestHandler
      * @return Response
@@ -80,14 +76,14 @@ class ArticleController extends Controller
     {
 
         # Récupération de l'auteur | ou en session.
-        $auteur = $this->getDoctrine()
-            ->getRepository(User::class)
-            ->find(1);
+        # $auteur = $this->getDoctrine()
+        #     ->getRepository(User::class)
+        #     ->find(1);
         # $article->setUser($auteur);
 
         # Création d'un nouvel article
         # $article = new Article();
-        $article = new ArticleRequest($auteur);
+        $article = new ArticleRequest($this->getUser());
 
         # Créer un Formulaire permettant l'ajout d'un Article
         $form = $this->createForm(ArticleType::class, $article)
@@ -111,15 +107,51 @@ class ArticleController extends Controller
             $article = $articleRequestHandler->handle($article);
 
             # Flash Messages
-            $this->addFlash('notice','Félicitation, votre article est en ligne !');
+            $this->addFlash('notice', 'Félicitation, votre article est en ligne !');
 
             # Redirection sur l'Article qui vient d'être créé.
             return $this->redirectToRoute('index_article', [
                 'category' => $article->getCategory()->getSlug(),
-                'slug'     => $article->getSlug(),
-                'id'       => $article->getId()
+                'slug' => $article->getSlug(),
+                'id' => $article->getId()
             ]);
         }
+
+        # Affichage du Formulaire dans la vue
+        return $this->render('article/addarticle.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
+
+    /**
+     * Editer / Modifier un Article
+     * @Route("/editer-un-article/{id<\d+>}", name="article_edit")
+     * @Security("has_role('ROLE_AUTHOR')")
+     * @param Article $article
+     * @param Request $request
+     * @param Packages $packages
+     * @param ArticleRequestUpdateHandler $updateHandler
+     * @return Response
+     * @internal param ArticleRequestHandler $articleRequestHandler
+     * @internal param ArticleRequest $articleRequest
+     */
+    public function editArticle(Article $article, Request $request, Packages $packages, ArticleRequestUpdateHandler $updateHandler)    {
+
+        # Récupération de notre ArticleRequest depuis Article
+        # $articleRequestHandler->prepareArticleFromRequest($article);
+        $ar = ArticleRequest::createFromArticle($article, $packages, $this->getParameter('articles_assets_directory'));
+
+        # Création du Formulaire
+        $options = [
+            'image_url' => $ar->getImageUrl(),
+            'slug'  => $ar->getSlug()
+        ];
+
+        $form = $this->createForm(ArticleType::class, $ar, $options)
+            ->handleRequest($request);
+
+        $updateHandler->handle($ar);
 
         # Affichage du Formulaire dans la vue
         return $this->render('article/addarticle.html.twig', [
