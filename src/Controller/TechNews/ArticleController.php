@@ -151,7 +151,19 @@ class ArticleController extends Controller
         $form = $this->createForm(ArticleType::class, $ar, $options)
             ->handleRequest($request);
 
-        $updateHandler->handle($ar);
+        # Quand le formulaire est soumis
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            # On sauvegarde les données
+            $article = $updateHandler->handle($ar, $article);
+
+            # Flash Message
+            $this->addFlash('notice', 'Modification Effectuée !');
+
+            return $this->redirectToRoute('article_edit', [
+                'id' => $article->getId()
+            ]);
+        }
 
         # Affichage du Formulaire dans la vue
         return $this->render('article/addarticle.html.twig', [

@@ -93,11 +93,18 @@ class Article
         $this->user = $user;
     }
 
-    public function update(string $title, string $slug, string $content)
+    public function update(string $title, string $slug, string $content,
+                           string $featuredImage, bool $special, bool $spotlight,
+                           \DateTime $createdDate, Category $category)
     {
-        $this->title = $title;
-        $this->slug = $slug;
-        $this->content = $content;
+        $this->title            = $title;
+        $this->slug             = $slug;
+        $this->content          = $content;
+        $this->featuredImage    = $featuredImage;
+        $this->special          = $special;
+        $this->spotlight        = $spotlight;
+        $this->createdDate      = $createdDate;
+        $this->category         = $category;
     }
 
     public function getId()

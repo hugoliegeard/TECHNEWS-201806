@@ -12,7 +12,6 @@ namespace App\Article;
 use App\Controller\HelperTrait;
 use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

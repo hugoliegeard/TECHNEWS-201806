@@ -35,6 +35,5 @@ services:
     App\Article\ArticleRequestHandler:
         arguments: ['@Doctrine\ORM\EntityManagerInterface','@App\Article\ArticleFactory','%articles_assets_directory%','@Symfony\Component\Asset\Packages']
 
-    App\Article\ArticleRequest:
-        properties:
-            article: '@Article'
+    App\Article\ArticleRequestUpdateHandler:
+        arguments: ['@Doctrine\ORM\EntityManagerInterface','%articles_assets_directory%']
