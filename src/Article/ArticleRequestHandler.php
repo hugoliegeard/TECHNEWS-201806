@@ -50,7 +50,7 @@ class ArticleRequestHandler
         $image = $request->getFeaturedImage();
 
         # Nom du Fichier
-        $fileName = $this->slugify($request->getTitle()) . '.'
+        $fileName = rand(0, 100).$this->slugify($request->getTitle()) . '.'
             . $image->guessExtension();
 
         $image->move(

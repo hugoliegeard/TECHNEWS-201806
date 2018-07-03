@@ -1,0 +1,24 @@
+<div id="newsletterModal" class="modal fade">
+    <div class="modal-dialog modal-newsletter">
+        <div class="modal-content">
+            {{ form_start(form) }}
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="fa fa-envelope-open-o"></i>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span>&times;</span></button>
+            </div>
+            <div class="modal-body text-center">
+                <h4>Inscrivez-vous<br>à notre Newsletter !</h4>
+                <p>Recevez en exclusivité nos dernières publications,<br>
+                    mises à jours et offres spéciales...</p>
+                <div class="input-group">
+                    {{ form_row(form.email) }}
+                    <span class="input-group-btn">
+                        {{ form_end(form) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

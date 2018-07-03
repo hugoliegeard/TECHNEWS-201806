@@ -135,9 +135,9 @@ class User implements UserInterface
         return $this->lastConnectionDate;
     }
 
-    public function setLastConnectionDate(?\DateTimeInterface $lastConnectionDate): self
+    public function setLastConnectionDate($timestamp = 'now'): self
     {
-        $this->lastConnectionDate = $lastConnectionDate;
+        $this->lastConnectionDate = new \DateTime($timestamp);
 
         return $this;
     }
