@@ -3,8 +3,12 @@
 namespace App\Controller\TechNews;
 
 
+use App\Article\ArticleCatalogue;
+use App\Article\Source\DoctrineSource;
+use App\Article\Source\YamlSource;
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Exception\DuplicateCatalogueArticleException;
 use App\Service\Article\YamlProvider;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,9 +19,10 @@ class IndexController extends Controller
     /**
      * Page d'Accueil de notre Site Internet
      * @param YamlProvider $yamlProvider
+     * @param ArticleCatalogue $catalogue
      * @return Response
      */
-    public function index(YamlProvider $yamlProvider)
+    public function index(YamlProvider $yamlProvider, ArticleCatalogue $catalogue)
     {
 
         # Récupération des Articles depuis YamlProvider
@@ -29,7 +34,8 @@ class IndexController extends Controller
             ->getRepository(Article::class);
 
         # Récupération des articles depuis la BDD
-        $articles = $repository->findAll();
+        # $articles = $repository->findAll();
+        $articles = $catalogue->findAll();
         $spotlight = $repository->findSpotlightArticles();
 
         # return new Response("<html><body><h1>PAGE D'ACCUEIL</h1></body></html>");
@@ -74,18 +80,21 @@ class IndexController extends Controller
      * Affiche un Article
      * @Route("/{category}/{slug}_{id<\d+>}.html",
      *     name="index_article")
-     * @param Article $article
+     * @param ArticleCatalogue $catalogue
      * @param $id
      * @return Response
+     * @internal param Article $article
      */
-    public function article(Article $article = null, $id)
+    public function article(ArticleCatalogue $catalogue, $id)
     {
+        #public function article(Article $article = null, $id)
+
         # Récupération de mon Article depuis la BDD
         # $article = $this->getDoctrine()
         #     ->getRepository(Article::class)
         #     ->find($id);
 
-        if (null === $article) {
+        #if (null === $article) {
 
             # On génère une exception...
             #    throw $this->createNotFoundException(
@@ -93,8 +102,14 @@ class IndexController extends Controller
             #    );
 
             # Ou, on peut rediriger l'utilisateur sur la page index
-            return $this->redirectToRoute('index', [], Response::HTTP_MOVED_PERMANENTLY);
+        #    return $this->redirectToRoute('index', [], Response::HTTP_MOVED_PERMANENTLY);
 
+        #}
+
+        try {
+            $article = $catalogue->find($id);
+        } catch (DuplicateCatalogueArticleException $catalogueArticleException) {
+            return $this->redirectToRoute('index', [], Response::HTTP_MOVED_PERMANENTLY);
         }
 
         # Récupérer les suggestions d'articles
@@ -113,16 +128,17 @@ class IndexController extends Controller
     /**
      * Génération de la Sidebar
      * @param Article|null $article
+     * @param ArticleCatalogue $catalogue
      * @return Response
      */
-    public function sidebar(?Article $article = null) {
+    public function sidebar(?Article $article = null, ArticleCatalogue $catalogue) {
 
         # Récupération du Répository
         $repository = $this->getDoctrine()
             ->getRepository(Article::class);
 
         # Récupération des 5 derniers articles
-        $articles = $repository->findLastFiveArticles();
+        $articles = $catalogue->findLastFiveArticles();
 
         # Récupérations des articles à la position "special"
         $specials = $repository->findSpecialArticles();

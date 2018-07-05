@@ -37,3 +37,28 @@ services:
 
     App\Article\ArticleRequestUpdateHandler:
         arguments: ['@Doctrine\ORM\EntityManagerInterface','%articles_assets_directory%']
+
+    # Solution I
+    #App\Article\ArticleCatalogue:
+    #    calls:
+    #        - ['addSource', ['@App\Article\Source\YamlSource']]
+    #        - ['addSource', ['@App\Article\Source\DoctrineSource']]
+
+    # Solution II
+    #App\Article\Source\YamlSource:
+    #    tags:
+    #        - app.article_source
+
+    #App\Article\Source\DoctrineSource:
+    #    tags:
+    #        - app.article_source
+
+    # Solution III
+    _instanceof:
+        App\Article\Source\ArticleAbstractSource:
+            tags:
+                - app.article_source
+
+    App\Article\ArticleCatalogue:
+        calls:
+            - ['setSources', [!tagged app.article_source]]

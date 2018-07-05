@@ -1,12 +1,12 @@
 data:
     article1 :
         id : 1
-        titre : 'Tip Aligning Digital Marketing with Business Goals and Objectives'
+        titre : 'YAML - Tip Aligning Digital Marketing with Business Goals and Objectives'
         contenu    : '<p>CONTENU</p>'
         featuredimage : '3.jpg'
         special : false
         spotlight : true
-        datecreation : 2017-02-26 09:37:18
+        datecreation : 2018-06-30 09:37:18
         categorie:
             id : 2
             libelle : 'Business'
@@ -17,7 +17,7 @@ data:
             email : 'wf3@hl-media.fr'
     article2 :
         id : 2
-        titre : 'Six big ways MacOS Sierra is going to change your Apple experience'
+        titre : 'YAML - Six big ways MacOS Sierra is going to change your Apple experience'
         contenu    : '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque blanditiis dicta itaque laborum natus nemo non perferendis perspiciatis quasi, temporibus? Cumque magnam sapiente sequi! Amet architecto eligendi inventore maiores quos.</p>'
         featuredimage : '2.jpg'
         special : false
@@ -33,7 +33,7 @@ data:
             email : 'b.jourand@hl-media.fr'
     article3 :
         id : 30
-        titre : 'Mitra vient de sortir !'
+        titre : 'YAML - Mitra vient de sortir !'
         contenu    : '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque blanditiis dicta itaque laborum natus nemo non perferendis perspiciatis quasi, temporibus? Cumque magnam sapiente sequi! Amet architecto eligendi inventore maiores quos.</p>'
         featuredimage : '4.jpg'
         special : false

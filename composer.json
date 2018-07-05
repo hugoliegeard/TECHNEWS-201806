@@ -22,7 +22,8 @@
         "symfony/security-csrf": "^4.1",
         "symfony/twig-bundle": "^4.1",
         "symfony/validator": "^4.1",
-        "symfony/yaml": "^4.1"
+        "symfony/yaml": "^4.1",
+        "tightenco/collect": "^5.6"
     },
     "require-dev": {
         "symfony/dotenv": "^4.1",
