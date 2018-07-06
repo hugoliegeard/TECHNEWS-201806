@@ -1,0 +1,5 @@
+asserts.article.title.notblank: N'oubliez pas de saisir votre titre
+asserts.article.content.notblank: N'oubliez pas de saisir votre contenu
+asserts.article.image.mimetype: Vérifiez le format de votre image
+asserts.article.image.maxsize: Votre image est trop lourde
+asserts.article.category.notnull: Vous devez choisir une catégorie

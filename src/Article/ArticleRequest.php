@@ -15,7 +15,7 @@ class ArticleRequest
     private $id;
 
     /**
-     * @Assert\NotBlank(message="N'oubliez pas le titre.")
+     * @Assert\NotBlank(message="asserts.article.title.notblank")
      * @Assert\Length(
      *     max=255,
      *     maxMessage="Votre titre est trop long. Pas plus de {{ limit }} caractères."
@@ -25,13 +25,13 @@ class ArticleRequest
     private $slug;
 
     /**
-     * @Assert\NotBlank(message="N'oubliez pas de rédiger votre article.")
+     * @Assert\NotBlank(message="asserts.article.content.notblank")
      */
     private $content;
 
     /**
-     * @Assert\Image(mimeTypesMessage="Votre image n'est pas reconnue.",
-     *     maxSize="2M", maxSizeMessage="Votre image est trop lourde.")
+     * @Assert\Image(mimeTypesMessage="asserts.article.image.mimetype",
+     *     maxSize="2M", maxSizeMessage="asserts.article.image.maxsize")
      */
     private $featuredImage;
     private $imageUrl;
@@ -40,7 +40,7 @@ class ArticleRequest
     private $createdDate;
 
     /**
-     * @Assert\NotNull(message="N'oubliez pas de choisir une catégorie.")
+     * @Assert\NotNull(message="asserts.article.category.notnull")
      */
     private $category;
     private $user;

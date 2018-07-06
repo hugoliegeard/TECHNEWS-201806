@@ -1,0 +1,6 @@
+nav.home: Accueil
+nav.logout: Déconnexion
+nav.login: Connexion
+nav.register: Inscription
+nav.search.placeholder: Rechercher...
+nav.search.btn: Lancer

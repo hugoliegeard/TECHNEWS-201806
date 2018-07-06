@@ -1,9 +1,10 @@
+{% trans_default_domain 'navigation' %}
 <!--menu mobile-->
 <nav class="menu-res hidden-lg hidden-md ">
     <div class="menu-res-inner">
         <ul>
             <li>
-                <a href="{{ path('index') }}">Accueil </a>
+                <a href="{{ path('index') }}">{{ 'nav.home' | trans }} </a>
             </li>
             {% for category in categories %}
                 <li>
@@ -35,7 +36,7 @@
             </div>
             <ul class="hidden-sm hidden-xs">
                 <li {% if active == 'home' %}class="current"{% endif %}>
-                    <a href="{{ path('index') }}">Accueil </a>
+                    <a href="{{ path('index') }}">{{ 'nav.home' | trans }} </a>
                 </li>
                 {% for category in categories %}
                     <li {{ active == category.slug ? 'class="current"' }}>
@@ -47,14 +48,14 @@
 
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li>
-                        <a href="{{ path('security_logout') }}">Déconnexion</a>
+                        <a href="{{ path('security_logout') }}">{{ 'nav.logout' | trans }}</a>
                     </li>
                 {% else %}
                     <li {% if active == 'login' %}class="current"{% endif %}>
-                        <a href="{{ path('security_login') }}">Connexion</a>
+                        <a href="{{ path('security_login') }}">{{ 'nav.login' | trans }}</a>
                     </li>
                     <li {% if active == 'register' %}class="current"{% endif %}>
-                        <a href="{{ path('user_register') }}">Inscription</a>
+                        <a href="{{ path('user_register') }}">{{ 'nav.register' | trans }}</a>
                     </li>
                 {% endif %}
             </ul>
@@ -63,8 +64,8 @@
                     <i class="fa fa-search"></i>
                 </div>
                 <div class="search-box">
-                    <input type="text" placeholder="Rechercher..."/>
-                    <button>Lancer</button>
+                    <input type="text" placeholder="{{ 'nav.search.placeholder' | trans }}"/>
+                    <button>{{ 'nav.search.btn' | trans }}</button>
                 </div>
             </div>
         </nav>

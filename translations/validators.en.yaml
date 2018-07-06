@@ -1,0 +1,5 @@
+asserts.article.title.notblank: 'Don''t forget your title'
+asserts.article.content.notblank: 'Don''t forget your content'
+asserts.article.image.mimetype: 'Please check your image format'
+asserts.article.image.maxsize: 'Your image is too big'
+asserts.article.category.notnull: 'Please choose a category'

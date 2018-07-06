@@ -19,39 +19,39 @@ class UserType extends AbstractType
         $builder
 
             ->add('firstName', TextType::class, [
-                'label' => 'Saisissez votre Prénom',
+                'label' => 'form.register.firstname',
                 'attr'  => [
-                    'placeholder' => 'Saisissez votre Prénom'
+                    'placeholder' => 'form.placeholder.firstname'
                 ]
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Saisissez votre Nom',
+                'label' => 'form.register.lastname',
                 'attr'  => [
-                    'placeholder' => 'Saisissez votre Nom'
+                    'placeholder' => 'form.placeholder.lastname'
                 ]
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Saisissez votre Email',
+                'label' => 'form.register.email',
                 'attr'  => [
-                    'placeholder' => 'Saisissez votre Email'
+                    'placeholder' => 'form.placeholder.email'
                 ]
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Saisissez votre Mot de Passe',
+                'label' => 'form.register.password',
                 'attr'  => [
-                    'placeholder' => 'Saisissez entre 8 et 20 caractères.'
+                    'placeholder' => 'form.placeholder.password'
                 ]
             ])
             ->add('conditions', CheckboxType::class,[
-                'label' => "J'accepte les Conditions Générales d'Utilisation",
+                'label' => "form.register.cgu",
                 'attr' => [
                     'data-toggle' => 'toggle',
-                    'data-on' => 'Oui',
-                    'data-off' => 'Non'
+                    'data-on' => 'form.register.cgu.on',
+                    'data-off' => 'form.register.cgu.off'
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => "Je m'inscris"
+                'label' => "form.register.submit"
             ])
         ;
     }
@@ -59,7 +59,8 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-           'data_class' =>  UserRequest::class
+           'data_class' =>  UserRequest::class,
+            'translation_domain' => 'forms'
         ]);
     }
 

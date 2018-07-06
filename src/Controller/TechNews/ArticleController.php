@@ -66,7 +66,10 @@ class ArticleController extends Controller
 
     /**
      * Formulaire pour créer un Article
-     * @Route("/creer-un-article", name="article_add")
+     * @Route({
+     *     "fr": "/creer-un-article",
+     *     "en": "/new-article"
+     * }, name="article_add")
      * @Security("has_role('ROLE_AUTHOR')")
      * @param Request $request
      * @param ArticleRequestHandler $articleRequestHandler

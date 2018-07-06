@@ -1,16 +1,17 @@
 {% extends "layout.html.twig" %}
+{% trans_default_domain 'security' %}
 
 {% set active = 'register' %}
 
 {% block page_title %}
-    Inscription
+    {{ 'security.register' | trans }}
 {% endblock %}
 
 {% block content %}
 
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1">
-            <h3>Inscrivez-vous</h3>
+            <h3>{{ 'security.register' | trans }}</h3>
             {#{% form_theme form 'bootstrap_3_layout.html.twig' %}#}
             {{ form(form, {attr: {novalidate: 'novalidate'}}) }}
         </div>

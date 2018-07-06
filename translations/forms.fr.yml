@@ -1,0 +1,12 @@
+form.register.firstname: Prénom
+form.placeholder.firstname: Prénom...
+form.register.lastname: Nom
+form.placeholder.lastname: Nom...
+form.register.email: Email
+form.placeholder.email: Email...
+form.register.password: 'Mot de passe'
+form.placeholder.password: 'Mot de passe...'
+form.register.cgu: 'J''accepte les CGU'
+form.register.cgu.on: Oui
+form.register.cgu.off: Non
+form.register.submit: 'Je m''inscris !'

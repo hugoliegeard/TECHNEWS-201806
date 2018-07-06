@@ -15,7 +15,10 @@ class UserController extends Controller
 
     /**
      * Inscription d'un Utilisateur
-     * @Route("/inscription",
+     * @Route({
+     *     "fr": "/inscription",
+     *     "en": "/register"
+     * },
      *     name="user_register",
      *     methods={"GET", "POST"})
      * @param Request $request
