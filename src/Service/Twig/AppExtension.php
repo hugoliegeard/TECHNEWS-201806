@@ -9,9 +9,11 @@
 namespace App\Service\Twig;
 
 
+use App\Entity\Article;
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Twig\Extension\AbstractExtension;
 
 class AppExtension extends AbstractExtension
@@ -19,18 +21,32 @@ class AppExtension extends AbstractExtension
 
     private $em;
     private $session;
+    private $user;
     public const NB_SUMMARY_CHAR = 170;
 
     /**
      * AppExtension constructor.
      * @param EntityManagerInterface $manager
+     * @param TokenStorageInterface $tokenStorage
      * @param SessionInterface $session
      * @internal param $em
      */
-    public function __construct(EntityManagerInterface $manager, SessionInterface $session)
+    public function __construct(EntityManagerInterface $manager,
+                                TokenStorageInterface $tokenStorage,
+                                SessionInterface $session)
     {
+
+        # Récupération de Doctrine
         $this->em = $manager;
+
+        # Récupération de la session
         $this->session = $session;
+
+        # Récupération de l'Auteur, si un Token existe...
+        if ($tokenStorage->getToken()) {
+            $this->user = $tokenStorage->getToken()->getUser();
+        }
+
     }
 
     public function getFilters()
@@ -49,7 +65,7 @@ class AppExtension extends AbstractExtension
                     $stringCut = substr($string, 0, self::NB_SUMMARY_CHAR);
 
                     # Je m'assure de ne pas couper de mot
-                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).'...';
+                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . '...';
 
                 }
 
@@ -68,8 +84,28 @@ class AppExtension extends AbstractExtension
                 return $this->em->getRepository(Category::class)
                     ->findCategoriesHavingArticles();
             }),
-            new \Twig_Function('isUserInvited', function() {
+            new \Twig_Function('isUserInvited', function () {
                 return $this->session->get('inviteUserModal');
+            }),
+            new \Twig_Function('pendingArticles', function () {
+                return $this->em->getRepository(Article::class)
+                    ->countAuthorArticlesByStatus($this->user->getId(), 'review');
+            }),
+            new \Twig_Function('publishedArticles', function () {
+                return $this->em->getRepository(Article::class)
+                    ->countAuthorArticlesByStatus($this->user->getId(), 'published');
+            }),
+            new \Twig_Function('approvalArticles', function () {
+                return $this->em->getRepository(Article::class)
+                    ->countArticlesByStatus('editor');
+            }),
+            new \Twig_Function('correctorArticles', function () {
+                return $this->em->getRepository(Article::class)
+                    ->countArticlesByStatus('corrector');
+            }),
+            new \Twig_Function('publisherArticles', function () {
+                return $this->em->getRepository(Article::class)
+                    ->countArticlesByStatus('publisher');
             })
         ];
     }

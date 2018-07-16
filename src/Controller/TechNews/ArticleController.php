@@ -6,6 +6,7 @@ use App\Article\ArticleRequest;
 use App\Article\ArticleRequestHandler;
 use App\Article\ArticleRequestUpdateHandler;
 use App\Article\ArticleType;
+use App\Article\ArticleWorkflowHandler;
 use App\Controller\HelperTrait;
 use App\Entity\Article;
 use App\Entity\Category;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Workflow\Exception\LogicException;
+use Symfony\Component\Workflow\Registry;
 
 class ArticleController extends Controller
 {
@@ -139,7 +142,8 @@ class ArticleController extends Controller
      * @internal param ArticleRequestHandler $articleRequestHandler
      * @internal param ArticleRequest $articleRequest
      */
-    public function editArticle(Article $article, Request $request, Packages $packages, ArticleRequestUpdateHandler $updateHandler)    {
+    public function editArticle(Article $article, Request $request, Packages $packages, ArticleRequestUpdateHandler $updateHandler)
+    {
 
         # Récupération de notre ArticleRequest depuis Article
         # $articleRequestHandler->prepareArticleFromRequest($article);
@@ -148,7 +152,7 @@ class ArticleController extends Controller
         # Création du Formulaire
         $options = [
             'image_url' => $ar->getImageUrl(),
-            'slug'  => $ar->getSlug()
+            'slug' => $ar->getSlug()
         ];
 
         $form = $this->createForm(ArticleType::class, $ar, $options)
@@ -172,6 +176,162 @@ class ArticleController extends Controller
         return $this->render('article/addarticle.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * Afficher les articles publiés d'un Auteur
+     * @Route({
+     *     "fr": "/mes-articles",
+     *     "en": "/my-articles"
+     * }, name="article_published")
+     * @Security("has_role('ROLE_AUTHOR')")
+     */
+    public function publishedArticles()
+    {
+        # Récupération de l'Auteur
+        $author = $this->getUser();
+
+        # Récupération des articles
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findAuthorArticlesByStatus($author->getId(), 'published');
+
+        # Affichage dans la vue
+        return $this->render('article/articles.html.twig', [
+            'articles' => $articles,
+            'title' => 'Mes Articles Publiés'
+        ]);
+    }
+
+    /**
+     * Afficher les articles en attente de soumission
+     * @Route({
+     *     "fr": "/mes-articles/en-attente",
+     *     "en": "/my-articles/pending"
+     * }, name="article_pending")
+     * @Security("has_role('ROLE_AUTHOR')")
+     */
+    public function pendingArticles()
+    {
+        # Récupération de l'Auteur
+        $author = $this->getUser();
+
+        # Récupération des articles
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findAuthorArticlesByStatus($author->getId(), 'review');
+
+        # Affichage dans la vue
+        return $this->render('article/articles.html.twig', [
+            'articles' => $articles,
+            'title' => 'Mes Articles en Attente'
+        ]);
+    }
+
+    /**
+     * Afficher les articles en attente de validation
+     * @Route({
+     *     "fr": "/les-articles/en-attente-de-validation",
+     *     "en": "/articles/pending-approval"
+     * }, name="article_approval")
+     * @Security("has_role('ROLE_EDITOR')")
+     */
+    public function approvalArticles()
+    {
+        # Récupération des articles
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findArticlesByStatus('editor');
+
+        # Affichage dans la vue
+        return $this->render('article/articles.html.twig', [
+            'articles' => $articles,
+            'title' => 'En Attente de Validation'
+        ]);
+    }
+
+    /**
+     * Afficher les articles en attente de correction
+     * @Route({
+     *     "fr": "/les-articles/en-attente-de-correction",
+     *     "en": "/articles/pending-correction"
+     * }, name="article_corrector")
+     * @Security("has_role('ROLE_CORRECTOR')")
+     */
+    public function correctorArticles()
+    {
+        # Récupération des articles
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findArticlesByStatus('corrector');
+
+        # Affichage dans la vue
+        return $this->render('article/articles.html.twig', [
+            'articles' => $articles,
+            'title' => 'En Attente de Correction'
+        ]);
+    }
+
+    /**
+     * Afficher les articles en attente de publication
+     * @Route({
+     *     "fr": "/les-articles/en-attente-de-publication",
+     *     "en": "/articles/pending-publication"
+     * }, name="article_publisher")
+     * @Security("has_role('ROLE_PUBLISHER')")
+     */
+    public function publisherArticles()
+    {
+        # Récupération des articles
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findArticlesByStatus('publisher');
+
+        # Affichage dans la vue
+        return $this->render('article/articles.html.twig', [
+            'articles' => $articles,
+            'title' => 'En Attente de Publication'
+        ]);
+    }
+
+    /**
+     * Permet de changer le status d'un Article
+     * @Route("workflow/{status}/{id}", name="article_workflow")
+     * @Security("has_role('ROLE_AUTHOR')")
+     * @param $status
+     * @param Article $article
+     * @param ArticleWorkflowHandler $awh
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @internal param Registry $workflows
+     */
+    public function workflow($status,
+                             Article $article,
+                             ArticleWorkflowHandler $awh,
+                             Request $request)
+    {
+
+        # Traitement du Workflow
+        try {
+            $awh->handle($article, $status);
+
+            # Notification
+            $this->addFlash('notice',
+                'Votre article à bien été transmis. Merci.');
+
+        } catch (LogicException $e) {
+
+            # Notification
+            $this->addFlash('error',
+                'Changement de statut impossible.');
+
+        }
+
+        # Récupération du Redirect
+        $redirect = $request->get('redirect') ?? 'index';
+
+        # On redirige l'utilisateur sur la bonne page
+        return $this->redirectToRoute($redirect);
 
     }
 

@@ -8,3 +8,7 @@ sidebar.newsletter.placeholder: Mail...
 sidebar.newsletter.btn: 'Subscribe !'
 sidebar.social.followus: 'Follow Us'
 sidebar.special.title: Special
+sidebar:
+  article:
+    published: 'Published Articles'
+    pending: 'Pending Articles'

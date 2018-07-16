@@ -8,3 +8,10 @@ sidebar.newsletter.placeholder: Email...
 sidebar.newsletter.btn: 'Je m''inscris'
 sidebar.social.followus: Suivez-nous
 sidebar.special.title: 'En Avant'
+sidebar:
+  article:
+    published: 'Mes articles publiés'
+    pending: 'Mes articles en attente'
+    approval: 'En attente de validation'
+    corrector: 'En attente de correction'
+    publisher: 'En attente de publication'
