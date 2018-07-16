@@ -33,10 +33,12 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\Article\ArticleRequestHandler:
-        arguments: ['@Doctrine\ORM\EntityManagerInterface','@App\Article\ArticleFactory','%articles_assets_directory%','@Symfony\Component\Asset\Packages']
+        arguments:
+            $assetsDirectory: '%articles_assets_directory%'
 
     App\Article\ArticleRequestUpdateHandler:
-        arguments: ['@Doctrine\ORM\EntityManagerInterface','%articles_assets_directory%']
+        arguments:
+            $assetsDirectory: '%articles_assets_directory%'
 
     # Solution I
     #App\Article\ArticleCatalogue:

@@ -44,6 +44,7 @@ class ArticleRequest
      */
     private $category;
     private $user;
+    private $status;
 
     /**
      * ArticleRequest constructor.
@@ -229,6 +230,22 @@ class ArticleRequest
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
     /**

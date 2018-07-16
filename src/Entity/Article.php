@@ -67,6 +67,11 @@ class Article
     private $user;
 
     /**
+     * @ORM\Column(type="array")
+     */
+    private $status;
+
+    /**
      * Article constructor.
      * @param $id
      * @param $title
@@ -78,8 +83,9 @@ class Article
      * @param $createdDate
      * @param $category
      * @param $user
+     * @param $status
      */
-    public function __construct($id = null, $title, $slug, $content, $featuredImage, $special, $spotlight, $createdDate, $category, $user)
+    public function __construct($id = null, $title, $slug, $content, $featuredImage, $special, $spotlight, $createdDate, $category, $user, $status)
     {
         $this->id = $id;
         $this->title = $title;
@@ -91,6 +97,7 @@ class Article
         $this->createdDate = $createdDate;
         $this->category = $category;
         $this->user = $user;
+        $this->status = $status;
     }
 
     public function update(string $title, string $slug, string $content,
@@ -232,5 +239,19 @@ class Article
         $this->slug = $slug;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
 }

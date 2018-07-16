@@ -1,0 +1,54 @@
+framework:
+    workflows:
+        article_publishing:
+            type: 'workflow' # or 'state_machine'
+            marking_store:
+                type: 'multiple_state' # or 'single_state'
+                arguments:
+                    - 'status'
+            supports:
+                - App\Entity\Article
+                - App\Article\ArticleRequest
+            initial_place: draft
+            places:
+                - draft
+                - review
+                - editor
+                - corrector
+                - correction_ok
+                - publisher
+                - publisher_ok
+                - refused
+                - published
+            transitions:
+                to_review:
+                    from: draft
+                    to:   review
+                to_approval:
+                    from: review
+                    to:   editor
+                editor_ok:
+                    from: editor
+                    to:   [corrector, publisher]
+                editor_fail:
+                    from: editor
+                    to:   review
+                editor_refused:
+                    from: editor
+                    to:   refused
+                corr_approuved:
+                    from: corrector
+                    to:   correction_ok
+                corr_failure:
+                    from: corrector
+                    to:   editor
+                pub_approuved:
+                    from: publisher
+                    to:   publisher_ok
+                pub_failure:
+                    from: publisher
+                    to:   editor
+                to_be_published:
+                    from: [publisher_ok, correction_ok]
+                    to:   published
+

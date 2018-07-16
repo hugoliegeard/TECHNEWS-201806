@@ -117,7 +117,8 @@ class YamlSource extends ArticleAbstractSource
             $tmp->spotlight,
             $date->setTimestamp($tmp->datecreation),
             $category,
-            $user
+            $user,
+            'published'
         );
 
     }

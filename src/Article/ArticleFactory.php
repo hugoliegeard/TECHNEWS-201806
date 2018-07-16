@@ -25,7 +25,8 @@ class ArticleFactory
             $request->getSpotlight(),
             $request->getCreatedDate(),
             $request->getCategory(),
-            $request->getUser()
+            $request->getUser(),
+            $request->getStatus()
         );
     }
 }
