@@ -1,0 +1,91 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {# Aperçu dans la toolbar #}
+    {% set icon %}
+        <span style="color: #FFF;">
+            {{ include('collector/icon.svg') }}
+        </span>
+        <span class="sf-toolbar-value">
+            Catalog & Sources Statistics
+        </span>
+    {% endset %}
+
+    {% set text %}
+        {# Le contenu qui est affiché au passage de la souris #}
+
+        {% for key, stat in collector.stats %}
+            <div class="sf-toolbar-info-piece">
+                <b>{{ key }}</b>
+                <span class="sf-toolbar-status">{{ stat }}</span>
+            </div>
+        {% endfor %}
+
+    {% endset %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { 'link': true }) }}
+{% endblock %}
+
+{% block head %}
+    {# Optional. Here you can link to or define your own CSS and JS contents. #}
+    {# Use {{ parent() }} to extend the default styles instead of overriding them. #}
+    {{ parent() }}
+    <script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                exportEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title:{
+                    text: "Catalog & Sources Statistics"
+                },
+                axisY: {
+                    title: "Sources"
+                },
+                data: [{
+                    type: "column", //change type to bar, line, area, pie, etc
+                    //indexLabel: "{y}", //Shows y value on all Data Points
+                    indexLabelFontColor: "#5A5757",
+                    indexLabelPlacement: "outside",
+                    dataPoints: [
+                        {% for key, stat in collector.stats %}
+                            { y: {{ stat }}, label:"{{ key }}" },
+                        {% endfor %}
+                    ]
+                }]
+            });
+            chart.render();
+        }
+    </script>
+{% endblock %}
+
+{% block menu %}
+    {# This left-hand menu appears when using the full-screen profiler. #}
+    <span class="label">
+        <span class="icon">{{ include('collector/icon.svg') }}</span>
+        <strong>Catalog & Sources</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    {# Optional, for showing the most details. #}
+    {#<h2>Catalog & Sources Statistics</h2>#}
+
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <table>
+        <tr>
+            <th>Catalog | Source</th>
+            <th>Data count</th>
+        </tr>
+
+        {% for key, stat in collector.stats %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ stat }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

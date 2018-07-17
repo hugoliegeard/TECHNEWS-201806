@@ -119,4 +119,24 @@ class ArticleCatalogue implements ArticleCatalogueInterface
 
         return $articles;
     }
+
+    /**
+     * Récupère des statistiques
+     * sur les différentes sources.
+     */
+    public function getStats()
+    {
+        $stats = [];
+
+        # Nombre de source du catalogue
+        $stats[get_class($this)] = $this->count();
+
+        # Nombre d'articles pour chaque source
+        /* @var $source ArticleAbstractSource */
+        foreach ($this->sources as $source) {
+            $stats[get_class($source)] = $source->count();
+        }
+
+        return $stats;
+    }
 }

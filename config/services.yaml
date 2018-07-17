@@ -64,3 +64,14 @@ services:
     App\Article\ArticleCatalogue:
         calls:
             - ['setSources', [!tagged app.article_source]]
+
+    App\DataCollector\SourcesCollector:
+        tags:
+            -
+                name:     data_collector
+                template: 'collector/sources.html.twig'
+                # must match the value returned by the getName() method
+                id:       'app.sources_collector'
+                # optional priority
+                # priority: 300
+        public: false
