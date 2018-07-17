@@ -13,12 +13,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UserManagerCommand extends Command
 {
 
-    private $io, $em;
+    private $io, $em, $users;
 
     public function __construct($name = null, EntityManagerInterface $manager)
     {
         parent::__construct($name);
         $this->em = $manager;
+        $this->users = $manager->getRepository(User::class)->findAll();
     }
 
     protected function configure()
@@ -105,9 +106,9 @@ class UserManagerCommand extends Command
         $display = [];
 
         # Récupération des users dans la BDD
-        $users = $this->em->getRepository(User::class)->findAll();
+//        $users = $this->em->getRepository(User::class)->findAll();
 
-        foreach ($users as $user) {
+        foreach ($this->users as &$user) {
             $display[] = [
                 $user->getId(),
                 $user->getFirstname() . ' ' . $user->getLastname(),
